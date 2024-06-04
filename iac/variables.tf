@@ -55,7 +55,7 @@ variable "ehcg" {
 }
 
 variable "failover_location" {
-  description = "The Azure Region for CosmosDB failover."
+  description = "The Azure Region for CosmosDB failover"
   default = "eastus"
 }
 
