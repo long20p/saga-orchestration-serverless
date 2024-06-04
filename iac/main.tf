@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "sagalogic-resource-group" {
-  name     = "${var.prefix}-resources"
+  name     = "rg-${var.common_name}-${var.environment}"
   location = var.location
 
   tags = {
@@ -8,7 +8,7 @@ resource "azurerm_resource_group" "sagalogic-resource-group" {
 }
 
 resource "azurerm_eventhub_namespace" "sagalogic-namespace" {
-  name                = "${var.prefix}-ehnamespace"
+  name                = "${var.prefix}-ehnamespace-${var.common_name}-${var.environment}"
   location            = azurerm_resource_group.sagalogic-resource-group.location
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
   sku                 = "Standard"
@@ -20,7 +20,7 @@ resource "azurerm_eventhub_namespace" "sagalogic-namespace" {
 }
 
 resource "azurerm_eventhub_namespace_authorization_rule" "sagalogic-namespace-auth" {
-  name                = "${var.prefix}-nsauth-rule"
+  name                = "${var.prefix}-nsauth-rule-${var.common_name}-${var.environment}"
   namespace_name      = azurerm_eventhub_namespace.sagalogic-namespace.name
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
 
@@ -50,7 +50,7 @@ resource "azurerm_eventhub_consumer_group" "sagalogic-eventhub-cons-grp" {
 }
 
 resource "azurerm_storage_account" "sagalogic-storage-account" {
-  name                     = "${var.prefix}${var.storage_account_name}"
+  name                     = "${var.prefix}st${var.common_name}${var.environment}"
   resource_group_name      = azurerm_resource_group.sagalogic-resource-group.name
   location                 = azurerm_resource_group.sagalogic-resource-group.location
   account_tier             = "Standard"
@@ -62,7 +62,7 @@ resource "azurerm_storage_account" "sagalogic-storage-account" {
 }
 
 resource "azurerm_app_service_plan" "sagalogic-app-service-plan" {
-  name                = "${var.prefix}-service-plan"
+  name                = "${var.prefix}-farms--${var.common_name}-${var.environment}"
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
   location            = azurerm_resource_group.sagalogic-resource-group.location
 
@@ -77,7 +77,7 @@ resource "azurerm_app_service_plan" "sagalogic-app-service-plan" {
 }
 
 resource "azurerm_function_app" "sagalogic-function" {
-  name                      = "${var.prefix}-${var.azure_function_app}"
+  name                      = "${var.prefix}-func-${var.common_name}-${var.environment}"
   resource_group_name       = azurerm_resource_group.sagalogic-resource-group.name
   location                  = azurerm_resource_group.sagalogic-resource-group.location
   app_service_plan_id       = azurerm_app_service_plan.sagalogic-app-service-plan.id
@@ -130,7 +130,7 @@ resource "random_integer" "sagalogic-ri" {
 }
 
 resource "azurerm_cosmosdb_account" "sagalogic-db-account" {
-  name                = "${var.prefix}-cosmos-sagalogic-db-${random_integer.sagalogic-ri.result}"
+  name                = "${var.prefix}-cosmos-db-${var.common_name}-${var.environment}-${random_integer.sagalogic-ri.result}"
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
   location            = azurerm_resource_group.sagalogic-resource-group.location
   offer_type          = "Standard"
@@ -161,7 +161,7 @@ resource "azurerm_cosmosdb_account" "sagalogic-db-account" {
 }
 
 resource "azurerm_cosmosdb_sql_database" "sagalogic-sql-database" {
-  name                = "${var.prefix}-cosmos-sql-db"
+  name                = "${var.prefix}-cosmos-sql-db-${var.common_name}-${var.environment}"
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
   account_name        = azurerm_cosmosdb_account.sagalogic-db-account.name
   throughput          = 500
@@ -177,7 +177,7 @@ resource "azurerm_cosmosdb_sql_container" "sagalogic-sql-container" {
 }
 
 resource "azurerm_application_insights" "sagalogic-application-insights" {
-  name                = "${var.prefix}-app-insights"
+  name                = "${var.prefix}-appi-${var.common_name}-${var.environment}"
   location            = var.location
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
   application_type    = "web"

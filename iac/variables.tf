@@ -27,6 +27,10 @@ variable "environment" {
   description = "Environment being deployed"
 }
 
+variable "common_name" {
+  description = "Common segment in resource names"
+}
+
 variable "location" {
   description = "The Azure Region in which all resources should be created."
 }
@@ -54,14 +58,6 @@ variable "collections" {
   description = "Create Tables in SQL"
   type        = map(string)
   default     = { "validator" = "id", "receipt" = "transactionId", "orchestrator" = "id", "transfer" = "transactionId", "saga" = "transactionId" }
-}
-
-variable "storage_account_name" {
-  description = "Unique global identifier for an Azure Storage Account"
-}
-
-variable "azure_function_app" {
-  description = "Unique global identifier for an Azure Functions App"
 }
 
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29709.97
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saga.Orchestration", "Saga.Orchestration\Saga.Orchestration.csproj", "{9ACB9DA2-DE8B-4540-885F-C13B53E0FAC3}"
 EndProject
@@ -18,6 +18,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saga.Functions.Tests", "Saga.Functions.Tests\Saga.Functions.Tests.csproj", "{06DE7E36-BAE2-40C5-B1DA-9E9BAAC5A55F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Saga.Common.Tests", "Saga.Common.Tests\Saga.Common.Tests.csproj", "{35542E59-830C-4E6C-9B4C-FCD4F4C78485}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{53A6C3D8-CDE8-411E-B47A-8FC49F1F59B8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "iac", "iac", "{D7FBAA55-584F-4333-84C3-BA686EA9D572}"
+	ProjectSection(SolutionItems) = preProject
+		..\iac\backend.tf = ..\iac\backend.tf
+		..\iac\main.tf = ..\iac\main.tf
+		..\iac\provider.tf = ..\iac\provider.tf
+		..\iac\terraform.tfvars = ..\iac\terraform.tfvars
+		..\iac\variables.tf = ..\iac\variables.tf
+		..\iac\version.tf = ..\iac\version.tf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +72,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D7FBAA55-584F-4333-84C3-BA686EA9D572} = {53A6C3D8-CDE8-411E-B47A-8FC49F1F59B8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D087D313-2350-43D8-BD7F-DD0EF4F970A4}
