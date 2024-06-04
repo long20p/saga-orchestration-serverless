@@ -1,0 +1,6 @@
+prefix				= "lp"
+environment			= "dv"
+common_name			= "long20saga"
+location			= "westus"
+partition_count		= "2"
+failover_location	= "eastus"
