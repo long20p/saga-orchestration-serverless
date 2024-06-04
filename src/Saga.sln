@@ -26,7 +26,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "iac", "iac", "{D7FBAA55-584
 		..\iac\backend.tf = ..\iac\backend.tf
 		..\iac\main.tf = ..\iac\main.tf
 		..\iac\provider.tf = ..\iac\provider.tf
-		..\iac\terraform.tfvars = ..\iac\terraform.tfvars
 		..\iac\variables.tf = ..\iac\variables.tf
 		..\iac\version.tf = ..\iac\version.tf
 	EndProjectSection

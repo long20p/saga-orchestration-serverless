@@ -1,6 +1,0 @@
-prefix				= "lp"
-environment			= "dv"
-common_name			= "sagalogic"
-location			= "westeurope"
-partition_count		= "2"
-failover_location	= "eastus"

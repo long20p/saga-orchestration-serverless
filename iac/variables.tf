@@ -21,18 +21,22 @@ variable "tenant_id" {
 
 variable "prefix" {
   description = "The Prefix used for all resources"
+  default = "lp"
 }
 
 variable "environment" {
   description = "Environment being deployed"
+  default = "dv"
 }
 
 variable "common_name" {
   description = "Common segment in resource names"
+  default = "sagalogic"
 }
 
 variable "location" {
   description = "The Azure Region in which all resources should be created."
+  default = "westeurope"
 }
 
 variable "partition_count" {
@@ -52,6 +56,7 @@ variable "ehcg" {
 
 variable "failover_location" {
   description = "The Azure Region for CosmosDB failover."
+  default = "eastus"
 }
 
 variable "collections" {
