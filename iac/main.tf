@@ -61,15 +61,12 @@ resource "azurerm_storage_account" "sagalogic-storage-account" {
   }
 }
 
-resource "azurerm_app_service_plan" "sagalogic-app-service-plan" {
+resource "azurerm_service_plan" "sagalogic-app-service-plan" {
   name                = "${var.prefix}-farms--${var.common_name}-${var.environment}"
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
   location            = azurerm_resource_group.sagalogic-resource-group.location
-
-  sku {
-    tier = "Standard"
-    size = "S1"
-  }
+  os_type             = "Linux"
+  sku_name            = "B2"
 
   tags = {
     environment = var.environment
@@ -80,12 +77,13 @@ resource "azurerm_function_app" "sagalogic-function" {
   name                      = "${var.prefix}-func-${var.common_name}-${var.environment}"
   resource_group_name       = azurerm_resource_group.sagalogic-resource-group.name
   location                  = azurerm_resource_group.sagalogic-resource-group.location
-  app_service_plan_id       = azurerm_app_service_plan.sagalogic-app-service-plan.id
-  storage_connection_string = azurerm_storage_account.sagalogic-storage-account.primary_connection_string
+  app_service_plan_id       = azurerm_service_plan.sagalogic-app-service-plan.id
+  storage_account_name      = azurerm_storage_account.sagalogic-storage-account.name
+  storage_account_access_key = azurerm_storage_account.sagalogic-storage-account.primary_access_key
   version                   = "~3"
 
   app_settings = {
-    "CosmosDbConnectionString"           = "AccountEndpoint=${azurerm_cosmosdb_account.sagalogic-db-account.endpoint};AccountKey=${azurerm_cosmosdb_account.sagalogic-db-account.primary_master_key};",
+    "CosmosDbConnectionString"           = "AccountEndpoint=${azurerm_cosmosdb_account.sagalogic-db-account.endpoint};AccountKey=${azurerm_cosmosdb_account.sagalogic-db-account.primary_key};",
     "CosmosDbDatabaseName"               = azurerm_cosmosdb_sql_database.sagalogic-sql-database.name,
     "CosmosDbOrchestratorCollectionName" = azurerm_cosmosdb_sql_container.sagalogic-sql-container["orchestrator"].name,
     "CosmosDbValidatorCollectionName"    = azurerm_cosmosdb_sql_container.sagalogic-sql-container["validator"].name,
@@ -137,7 +135,7 @@ resource "azurerm_cosmosdb_account" "sagalogic-db-account" {
     max_staleness_prefix    = 100
   }
 
-  enable_automatic_failover = true
+  automatic_failover_enabled = true
 
   geo_location {
     location          = var.failover_location
