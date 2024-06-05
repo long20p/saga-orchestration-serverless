@@ -145,7 +145,6 @@ resource "azurerm_cosmosdb_account" "sagalogic-db-account" {
   }
 
   geo_location {
-    prefix            = "${var.prefix}-cosmos-db-${var.common_name}-customid"
     location          = azurerm_resource_group.sagalogic-resource-group.location
     failover_priority = 0
   }
