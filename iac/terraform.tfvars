@@ -1,6 +1,6 @@
 prefix				= "lp"
 environment			= "dv"
-common_name			= "long20saga"
+common_name			= "long20saga4474"
 location			= "westus"
 partition_count		= "2"
 failover_location	= "eastus"

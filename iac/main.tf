@@ -124,13 +124,8 @@ resource "azurerm_function_app" "sagalogic-function" {
   }
 }
 
-resource "random_integer" "sagalogic-ri" {
-  min = 10000
-  max = 99999
-}
-
 resource "azurerm_cosmosdb_account" "sagalogic-db-account" {
-  name                = "${var.prefix}-cosmos-db-${var.common_name}-${var.environment}-${random_integer.sagalogic-ri.result}"
+  name                = "${var.prefix}-cosmos-db-${var.common_name}-${var.environment}"
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
   location            = azurerm_resource_group.sagalogic-resource-group.location
   offer_type          = "Standard"
@@ -150,7 +145,7 @@ resource "azurerm_cosmosdb_account" "sagalogic-db-account" {
   }
 
   geo_location {
-    prefix            = "${var.prefix}-cosmos-db-${random_integer.sagalogic-ri.result}-customid"
+    prefix            = "${var.prefix}-cosmos-db-${var.common_name}-customid"
     location          = azurerm_resource_group.sagalogic-resource-group.location
     failover_priority = 0
   }
