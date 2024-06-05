@@ -50,7 +50,7 @@ resource "azurerm_eventhub_consumer_group" "sagalogic-eventhub-cons-grp" {
 }
 
 resource "azurerm_storage_account" "sagalogic-storage-account" {
-  name                     = "${var.prefix}st${var.common_name}${var.environment}"
+  name                     = "st${var.common_name}${var.environment}"
   resource_group_name      = azurerm_resource_group.sagalogic-resource-group.name
   location                 = azurerm_resource_group.sagalogic-resource-group.location
   account_tier             = "Standard"
