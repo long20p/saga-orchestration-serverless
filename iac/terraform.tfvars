@@ -1,5 +1,5 @@
 prefix				= "lp"
-environment			= "dv"
+environment			= "dev"
 common_name			= "long20saga4474"
 location			= "westus"
 partition_count		= "2"
