@@ -27,6 +27,8 @@ resource "azurerm_eventhub_namespace_authorization_rule" "sagalogic-namespace-au
   listen = true
   send   = true
   manage = false
+
+  depends_on = [azurerm_eventhub_namespace.sagalogic-namespace]
 }
 
 resource "azurerm_eventhub" "sagalogic-eventhub" {
@@ -37,6 +39,8 @@ resource "azurerm_eventhub" "sagalogic-eventhub" {
 
   partition_count   = var.partition_count
   message_retention = 1
+
+  depends_on = [azurerm_eventhub_namespace.sagalogic-namespace]
 }
 
 
@@ -47,6 +51,8 @@ resource "azurerm_eventhub_consumer_group" "sagalogic-eventhub-cons-grp" {
   namespace_name      = azurerm_eventhub_namespace.sagalogic-namespace.name
   eventhub_name       = azurerm_eventhub.sagalogic-eventhub[each.key].name
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
+
+  depends_on = [azurerm_eventhub_namespace.sagalogic-namespace, azurerm_eventhub.sagalogic-eventhub]
 }
 
 resource "azurerm_storage_account" "sagalogic-storage-account" {
@@ -62,7 +68,7 @@ resource "azurerm_storage_account" "sagalogic-storage-account" {
 }
 
 resource "azurerm_service_plan" "sagalogic-app-service-plan" {
-  name                = "${var.prefix}-farms--${var.common_name}-${var.environment}"
+  name                = "${var.prefix}-farms-${var.common_name}-${var.environment}"
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
   location            = azurerm_resource_group.sagalogic-resource-group.location
   os_type             = "Linux"
@@ -117,6 +123,15 @@ resource "azurerm_function_app" "sagalogic-function" {
     "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.sagalogic-application-insights.instrumentation_key,
   }
 
+  depends_on = [
+    azurerm_service_plan.sagalogic-app-service-plan, 
+    azurerm_storage_account.sagalogic-storage-account, 
+    azurerm_eventhub.sagalogic-eventhub, 
+    azurerm_cosmosdb_sql_container.sagalogic-sql-container, 
+    azurerm_cosmosdb_sql_database.sagalogic-sql-database, 
+    azurerm_application_insights.sagalogic-application-insights
+  ]
+
   tags = {
     environment = var.environment
   }
@@ -157,6 +172,8 @@ resource "azurerm_cosmosdb_sql_database" "sagalogic-sql-database" {
   resource_group_name = azurerm_resource_group.sagalogic-resource-group.name
   account_name        = azurerm_cosmosdb_account.sagalogic-db-account.name
   throughput          = 500
+
+  depends_on = [azurerm_cosmosdb_account.sagalogic-db-account]
 }
 
 resource "azurerm_cosmosdb_sql_container" "sagalogic-sql-container" {
@@ -166,6 +183,8 @@ resource "azurerm_cosmosdb_sql_container" "sagalogic-sql-container" {
   account_name        = azurerm_cosmosdb_account.sagalogic-db-account.name
   database_name       = azurerm_cosmosdb_sql_database.sagalogic-sql-database.name
   partition_key_path  = "/${each.value}"
+
+  depends_on = [azurerm_cosmosdb_account.sagalogic-db-account]
 }
 
 resource "azurerm_application_insights" "sagalogic-application-insights" {
