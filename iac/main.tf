@@ -86,7 +86,7 @@ resource "azurerm_function_app" "sagalogic-function" {
   app_service_plan_id       = azurerm_service_plan.sagalogic-app-service-plan.id
   storage_account_name      = azurerm_storage_account.sagalogic-storage-account.name
   storage_account_access_key = azurerm_storage_account.sagalogic-storage-account.primary_access_key
-  version                   = "~3"
+  version                   = "~4"
 
   app_settings = {
     "CosmosDbConnectionString"           = "AccountEndpoint=${azurerm_cosmosdb_account.sagalogic-db-account.endpoint};AccountKey=${azurerm_cosmosdb_account.sagalogic-db-account.primary_key};",
