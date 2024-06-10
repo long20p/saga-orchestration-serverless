@@ -19,7 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1.8.0
+      uses: actions/setup-dotnet@v3
       with:
         include-prerelease: True
         dotnet-version: ${{ env.DOTNET_VERSION }}
@@ -47,5 +47,5 @@ jobs:
       uses: Azure/functions-action@v1
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        publish-profile: ${{ secrets.lp_func_long20saga4474_dev_C074 }}
+        publish-profile: ${{ secrets.lp_func_long20saga4474_dev_D7C6 }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
