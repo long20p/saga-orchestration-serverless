@@ -3,6 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
     <CodeAnalysisRuleSet>../Rules/ProjectRuleSet.ruleset</CodeAnalysisRuleSet>
+	<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" Link="stylecop.json" />

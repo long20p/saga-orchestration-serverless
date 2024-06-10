@@ -5,7 +5,7 @@ on:
   push:
     branches: [ main ]
     paths: 
-      - src/*
+      - src/**
       - .github/workflows/lp-func-long20saga4474-dev.yml
 env:
   AZURE_FUNCTIONAPP_NAME: lp-func-long20saga4474-dev
