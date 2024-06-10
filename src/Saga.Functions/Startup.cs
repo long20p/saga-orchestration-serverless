@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Saga.Functions
 {
+    /// <summary>
+    /// Startup class.
+    /// </summary>
     public class Startup : FunctionsStartup
     {
         public override void Configure(IFunctionsHostBuilder builder)

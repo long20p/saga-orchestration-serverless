@@ -99,7 +99,7 @@ namespace Saga.Functions.Factories
                 ProducerResult result = await context
                   .CallActivityWithRetryAsync<ProducerResult>(functionName, RetryOptions, item);
 
-                log.LogTrace(string.Format(ConstantStrings.EventCreated, context.InstanceId, functionName, result.Message.Body.Count));
+                log.LogTrace(string.Format(ConstantStrings.EventCreated, context.InstanceId, functionName, result.Message.Body.Length));
 
                 return new ActivityResult<ProducerResult>
                 {

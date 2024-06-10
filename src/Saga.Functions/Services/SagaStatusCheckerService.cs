@@ -29,10 +29,10 @@ namespace Saga.Functions.Services
            [HttpTrigger(AuthorizationLevel.Function, methods: "get", Route = "saga/state/{id}")] HttpRequestMessage request,
            string id,
            [DurableClient] IDurableOrchestrationClient client,
-           [CosmosDB(
+           [CosmosDBTrigger(
                 databaseName: @"%CosmosDbDatabaseName%",
-                collectionName: @"%CosmosDbOrchestratorCollectionName%",
-                ConnectionStringSetting = @"CosmosDbConnectionString")] IDocumentClient documentClient,
+                containerName: @"%CosmosDbOrchestratorCollectionName%",
+                Connection = @"CosmosDbConnectionString")] IDocumentClient documentClient,
            ILogger log)
         {
             Uri collectionUri = UriUtils.CreateTransactionCollectionUri();

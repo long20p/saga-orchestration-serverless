@@ -1,10 +1,9 @@
 name: Build and deploy to Function App
 on:
   push:
-    branches:
-    - main
-    paths:
-    - src/*
+    branches: [ main ]
+    paths: 
+      - src/*
 env:
   AZURE_FUNCTIONAPP_NAME: lp-func-long20saga4474-dev
   AZURE_FUNCTIONAPP_PACKAGE_PATH: ./src/Saga.Functions/published

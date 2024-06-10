@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
 using Newtonsoft.Json;
 using Saga.Common.Enums;
 using Saga.Common.Events;

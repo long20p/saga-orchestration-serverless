@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Moq;
 using Newtonsoft.Json;

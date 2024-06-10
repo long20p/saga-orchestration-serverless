@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using Microsoft.Extensions.Logging;
 using Saga.Orchestration.Models;
 using Saga.Orchestration.Models.Transaction;
 using Saga.Orchestration.Utils;
@@ -16,15 +15,15 @@ namespace Saga.Functions.Services.Activities
         [FunctionName(nameof(SagaOrchestratorActivity))]
         public static async Task<TransactionItem> SagaOrchestratorActivity(
           [ActivityTrigger] TransactionItem item,
-          [CosmosDB(
-        databaseName: @"%CosmosDbDatabaseName%",
-        collectionName: @"%CosmosDbOrchestratorCollectionName%",
-        ConnectionStringSetting = @"CosmosDbConnectionString")]
+          [CosmosDBTrigger(
+            databaseName: @"%CosmosDbDatabaseName%",
+            containerName: @"%CosmosDbOrchestratorCollectionName%",
+            Connection = @"CosmosDbConnectionString")]
       IAsyncCollector<TransactionItem> documentCollector,
-          [CosmosDB(
+          [CosmosDBTrigger(
         databaseName: @"%CosmosDbDatabaseName%",
-        collectionName: @"%CosmosDbOrchestratorCollectionName%",
-        ConnectionStringSetting = @"CosmosDbConnectionString")] IDocumentClient client)
+        containerName: @"%CosmosDbOrchestratorCollectionName%",
+        Connection = @"CosmosDbConnectionString")] IDocumentClient client)
         {
             if (item.State == SagaState.Pending.ToString())
             {

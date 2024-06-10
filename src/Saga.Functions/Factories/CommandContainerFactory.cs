@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.EventHubs;
+﻿using Azure.Messaging.EventHubs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Saga.Common.Processors;
@@ -10,7 +10,7 @@ namespace Saga.Functions.Factories
     {
         public static CommandContainer BuildCommandContainer(EventData eventData)
         {
-            var jsonBody = Encoding.UTF8.GetString(eventData.Body);
+            var jsonBody = Encoding.UTF8.GetString(eventData.Body.ToArray());
             var jObject = JsonConvert.DeserializeObject<JObject>(jsonBody);
             return new CommandContainer(jObject);
         }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.EventHubs;
+﻿using Azure.Messaging.EventHubs;
 using Microsoft.Azure.WebJobs;
 using Newtonsoft.Json;
 using Saga.Common.Messaging;

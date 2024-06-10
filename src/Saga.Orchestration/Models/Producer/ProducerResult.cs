@@ -1,5 +1,5 @@
 using System.Text;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
 
 namespace Saga.Orchestration.Models.Producer
 {

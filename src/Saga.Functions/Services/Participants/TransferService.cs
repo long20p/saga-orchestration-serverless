@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.Azure.EventHubs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Saga.Common.Messaging;
@@ -11,6 +10,7 @@ using Saga.Functions.Messaging;
 using Saga.Functions.Repository;
 using Saga.Participants.Transfer.Factories;
 using Saga.Participants.Transfer.Models;
+using Azure.Messaging.EventHubs;
 
 namespace Saga.Functions.Services.Participants
 {
@@ -20,11 +20,11 @@ namespace Saga.Functions.Services.Participants
         public static async Task TransferMoney(
           [EventHubTrigger(@"%TransferEventHubName%", Connection = @"EventHubsNamespaceConnection")] EventData[] eventsData,
           [EventHub(@"%ReplyEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<EventData> eventCollector,
-          [CosmosDB(
-        databaseName: @"%CosmosDbDatabaseName%",
-        collectionName: @"%CosmosDbTransferCollectionName%",
-        ConnectionStringSetting = @"CosmosDbConnectionString")]
-      IAsyncCollector<CheckingAccountLine> stateCollector,
+          [CosmosDBTrigger(
+            databaseName: @"%CosmosDbDatabaseName%",
+            containerName: @"%CosmosDbTransferCollectionName%",
+            Connection = @"CosmosDbConnectionString")]
+          IAsyncCollector<CheckingAccountLine> stateCollector,
           ILogger logger)
         {
             IMessageProducer eventProducer = new EventHubMessageProducer(eventCollector);

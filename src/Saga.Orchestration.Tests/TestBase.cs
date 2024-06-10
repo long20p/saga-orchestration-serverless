@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Microsoft.Azure.EventHubs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Saga.Common.Messaging;
 using Saga.Common.Commands;
 using Saga.Common.Processors;
+using Azure.Messaging.EventHubs;
 
 namespace Saga.Orchestration.Tests
 {
@@ -39,7 +39,7 @@ namespace Saga.Orchestration.Tests
 
         protected ICommandContainer DeserializeEventData(EventData eventData)
         {
-            var jsonBody = Encoding.UTF8.GetString(eventData.Body);
+            var jsonBody = Encoding.UTF8.GetString(eventData.Body.ToArray());
             var jObject = JsonConvert.DeserializeObject<JObject>(jsonBody);
             return new CommandContainer(jObject);
         }

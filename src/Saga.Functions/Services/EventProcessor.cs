@@ -1,6 +1,6 @@
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
@@ -15,16 +15,16 @@ namespace SagaOrchestration.Services
         [FunctionName(nameof(SagaEventProcessor))]
         public static async Task SagaEventProcessor(
           [EventHubTrigger(@"%ReplyEventHubName%", Connection = @"EventHubsNamespaceConnection")] EventData[] eventsData,
-          [CosmosDB(
-        databaseName: @"%CosmosDbDatabaseName%",
-        collectionName: @"%CosmosDbSagaCollectionName%",
-        ConnectionStringSetting = @"CosmosDbConnectionString")] IAsyncCollector<SagaItem> documentCollector,
+          [CosmosDBTrigger(
+            databaseName: @"%CosmosDbDatabaseName%",
+            containerName: @"%CosmosDbSagaCollectionName%",
+            Connection = @"CosmosDbConnectionString")] IAsyncCollector<SagaItem> documentCollector,
           [DurableClient] IDurableOrchestrationClient client,
           ILogger log)
         {
             foreach (EventData eventData in eventsData)
             {
-                var jsonBody = Encoding.UTF8.GetString(eventData.Body);
+                var jsonBody = Encoding.UTF8.GetString(eventData.Body.ToArray());
                 DefaultEvent @event = JsonConvert.DeserializeObject<DefaultEvent>(jsonBody);
 
                 if (@event.Header == null)
