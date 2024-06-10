@@ -1,12 +1,13 @@
 name: 'TerraformCI'
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
     paths:
       - iac/*
-      - .github/workflows/iac.yml 
-
+      - .github/workflows/iac.yml
+  
 defaults:
   run:
     working-directory: './iac'
