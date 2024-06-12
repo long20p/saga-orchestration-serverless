@@ -33,7 +33,7 @@ namespace Saga.Functions.Factories
             using (var cts = new CancellationTokenSource())
             {
                 DateTime deadline = activity.Context.CurrentUtcDateTime.Add(activity.Timeout);
-                Task activityTask = activity.Context.CallActivityWithRetryAsync<T>(activity.FunctionName, RetryOptions, activity.Input);
+                Task activityTask = activity.Context.CallActivityWithRetryAsync(activity.FunctionName, RetryOptions, activity.Input);
                 Task timeoutTask = activity.Context.CreateTimer(deadline, cts.Token);
                 Task winner = await Task.WhenAny(activityTask, timeoutTask);
 
@@ -110,6 +110,16 @@ namespace Saga.Functions.Factories
             {
                 log.LogError(string.Format(ConstantStrings.FunctionFailed, functionName, ex.Message));
 
+                return new ActivityResult<ProducerResult>
+                {
+                    Valid = false,
+                    Item = Activator.CreateInstance<ProducerResult>(),
+                    ExceptionMessage = ex.Message
+                };
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Unknown error occurred: {ex.ToString()}");
                 return new ActivityResult<ProducerResult>
                 {
                     Valid = false,

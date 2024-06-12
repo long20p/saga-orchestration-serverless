@@ -38,7 +38,7 @@ namespace Saga.Functions.Tests.Services.Activities
                 );
 
             TransactionItem resultItem = await OrchestratorActivity
-                .SagaOrchestratorActivity(item, documentCollectorMock.Object, documentClientMock.Object);
+                .SagaOrchestratorActivity(item, documentCollectorMock.Object);
 
             Assert.Equal(item.Id, resultItem.Id);
         }
@@ -70,7 +70,7 @@ namespace Saga.Functions.Tests.Services.Activities
                 .Returns((IOrderedQueryable<Document>)documents.AsQueryable());
 
             TransactionItem resultItem = await OrchestratorActivity
-                .SagaOrchestratorActivity(newItem, documentCollectorMock.Object, documentClientMock.Object);
+                .SagaOrchestratorActivity(newItem, documentCollectorMock.Object);
 
             Assert.NotNull(resultItem);
             Assert.Equal(newItem.Id, resultItem.Id);

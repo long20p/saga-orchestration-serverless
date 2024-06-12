@@ -20,7 +20,7 @@ namespace Saga.Functions.Services.Participants
         public static async Task ReceiptCreator(
           [EventHubTrigger(@"%ReceiptEventHubName%", Connection = @"EventHubsNamespaceConnection")] EventData[] eventsData,
           [EventHub(@"%ReplyEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<EventData> eventCollector,
-          [CosmosDBTrigger(
+          [CosmosDB(
             databaseName: @"%CosmosDbDatabaseName%",
             containerName: @"%CosmosDbReceiptCollectionName%",
             Connection = @"CosmosDbConnectionString")]

@@ -29,7 +29,7 @@ namespace Saga.Functions.Services
            [HttpTrigger(AuthorizationLevel.Function, methods: "get", Route = "saga/state/{id}")] HttpRequestMessage request,
            string id,
            [DurableClient] IDurableOrchestrationClient client,
-           [CosmosDBTrigger(
+           [CosmosDB(
                 databaseName: @"%CosmosDbDatabaseName%",
                 containerName: @"%CosmosDbOrchestratorCollectionName%",
                 Connection = @"CosmosDbConnectionString")] IDocumentClient documentClient,

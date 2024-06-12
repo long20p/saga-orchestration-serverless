@@ -15,7 +15,7 @@ namespace SagaOrchestration.Services
         [FunctionName(nameof(SagaEventProcessor))]
         public static async Task SagaEventProcessor(
           [EventHubTrigger(@"%ReplyEventHubName%", Connection = @"EventHubsNamespaceConnection")] EventData[] eventsData,
-          [CosmosDBTrigger(
+          [CosmosDB(
             databaseName: @"%CosmosDbDatabaseName%",
             containerName: @"%CosmosDbSagaCollectionName%",
             Connection = @"CosmosDbConnectionString")] IAsyncCollector<SagaItem> documentCollector,
