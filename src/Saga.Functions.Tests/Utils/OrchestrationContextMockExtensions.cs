@@ -115,15 +115,21 @@ namespace Saga.Functions.Tests.Utils
         {
             return new ProducerResult
             {
-                Message = CreateEventData(command)
+                Message = CreateMessage(command)
             };
         }
 
+        [Obsolete]
         private static EventData CreateEventData(Command command)
         {
             string serializedMsg = JsonConvert.SerializeObject(command);
             byte[] messageBytes = Encoding.UTF8.GetBytes(serializedMsg);
             return new EventData(messageBytes);
+        }
+
+        private static string CreateMessage(Command command)
+        {
+            return JsonConvert.SerializeObject(command);
         }
     }
 }

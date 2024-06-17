@@ -18,11 +18,11 @@ namespace Saga.Orchestration.Tests
         [Fact]
         public async Task Command_should_be_produced_by_valid_ingestion_service()
         {
-            var messagesCollectorMock = new Mock<IAsyncCollector<EventData>>();
+            var messagesCollectorMock = new Mock<IAsyncCollector<string>>();
             var loggerMock = new Mock<ILogger>();
 
             messagesCollectorMock
-              .Setup(x => x.AddAsync(It.IsAny<EventData>(), default))
+              .Setup(x => x.AddAsync(It.IsAny<string>(), default))
               .Returns(
                 Task.CompletedTask
               );
@@ -35,7 +35,7 @@ namespace Saga.Orchestration.Tests
             Producer producer = new Producer(messagesCollectorMock.Object, loggerMock.Object);
             ProducerResult result = await producer.ProduceCommandWithRetryAsync(command);
 
-            ICommandContainer commandContainer = DeserializeEventData(result.Message);
+            ICommandContainer commandContainer = DeserializeMessage(result.Message);
             MessageHeader header = GetCommandHeader(commandContainer);
 
             Assert.True(result.Valid);
@@ -49,7 +49,7 @@ namespace Saga.Orchestration.Tests
         [Fact]
         public async Task Command_should_not_be_produced_by_invalid_ingestion_service()
         {
-            IAsyncCollector<EventData> messagesCollector = null;
+            IAsyncCollector<string> messagesCollector = null;
             var loggerMock = new Mock<ILogger>();
 
             var command = new DefaultCommand
@@ -67,7 +67,7 @@ namespace Saga.Orchestration.Tests
         [Fact]
         public async Task Command_should_not_be_produced_by_unavailable_ingestion_service()
         {
-            var messagesCollectorMock = new Mock<IAsyncCollector<EventData>>();
+            var messagesCollectorMock = new Mock<IAsyncCollector<string>>();
             var loggerMock = new Mock<ILogger>();
 
             var command = new DefaultCommand
@@ -76,7 +76,7 @@ namespace Saga.Orchestration.Tests
             };
 
             messagesCollectorMock
-              .Setup(x => x.AddAsync(It.IsAny<EventData>(), default))
+              .Setup(x => x.AddAsync(It.IsAny<string>(), default))
               .Returns(
                 Task.FromException(new Exception())
               );

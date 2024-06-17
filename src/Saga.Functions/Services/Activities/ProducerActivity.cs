@@ -12,7 +12,7 @@ namespace Saga.Functions.Services.Activities
     {
         [FunctionName(nameof(ValidateTransferCommandProducerActivity))]
         public static async Task<ProducerResult> ValidateTransferCommandProducerActivity(
-          [EventHub(@"%ValidatorEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<EventData> messagesCollector,
+          [EventHub(@"%ValidatorEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<string> messagesCollector,
           [ActivityTrigger] ValidateTransferCommand command,
           ILogger log)
         {
@@ -22,7 +22,7 @@ namespace Saga.Functions.Services.Activities
 
         [FunctionName(nameof(TransferCommandProducerActivity))]
         public static async Task<ProducerResult> TransferCommandProducerActivity(
-          [EventHub(@"%TransferEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<EventData> messagesCollector,
+          [EventHub(@"%TransferEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<string> messagesCollector,
           [ActivityTrigger] TransferCommand command,
           ILogger log)
         {
@@ -32,7 +32,7 @@ namespace Saga.Functions.Services.Activities
 
         [FunctionName(nameof(CancelTransferCommandProducerActivity))]
         public static async Task<ProducerResult> CancelTransferCommandProducerActivity(
-          [EventHub(@"%TransferEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<EventData> messagesCollector,
+          [EventHub(@"%TransferEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<string> messagesCollector,
           [ActivityTrigger] CancelTransferCommand command,
           ILogger log)
         {
@@ -42,7 +42,7 @@ namespace Saga.Functions.Services.Activities
 
         [FunctionName(nameof(ReceiptCommandProducerActivity))]
         public static async Task<ProducerResult> ReceiptCommandProducerActivity(
-          [EventHub(@"%ReceiptEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<EventData> messagesCollector,
+          [EventHub(@"%ReceiptEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<string> messagesCollector,
           [ActivityTrigger] IssueReceiptCommand command,
           ILogger log)
         {

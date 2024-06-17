@@ -22,7 +22,7 @@ namespace Saga.Functions.Tests.Services.Participants
             }
         };
 
-        private static EventData[] CreateTransferEventsData()
+        private static string[] CreateTransferEventsData()
         {
             var command = new TransferCommand
             {
@@ -41,7 +41,7 @@ namespace Saga.Functions.Tests.Services.Participants
             return CreateEventsData(command);
         }
 
-        private static EventData[] CreateCancelTransferCommandEventsData()
+        private static string[] CreateCancelTransferCommandEventsData()
         {
             var command = new CancelTransferCommand
             {
@@ -60,14 +60,13 @@ namespace Saga.Functions.Tests.Services.Participants
             return CreateEventsData(command);
         }
 
-        private static EventData[] CreateEventsData(Command command)
+        private static string[] CreateEventsData(Command command)
         {
             string serializedMsg = JsonConvert.SerializeObject(command);
-            byte[] messageBytes = Encoding.UTF8.GetBytes(serializedMsg);
 
-            return new EventData[]
+            return new string[]
             {
-                new EventData(messageBytes)
+                serializedMsg
             };
         }
     }

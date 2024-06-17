@@ -18,8 +18,8 @@ namespace Saga.Functions.Services.Participants
     {
         [FunctionName(nameof(Validator))]
         public static async Task Validator(
-          [EventHubTrigger(@"%ValidatorEventHubName%", Connection = @"EventHubsNamespaceConnection")] EventData[] eventsData,
-          [EventHub(@"%ReplyEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<EventData> eventCollector,
+          [EventHubTrigger(@"%ValidatorEventHubName%", Connection = @"EventHubsNamespaceConnection")] string[] eventsData,
+          [EventHub(@"%ReplyEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<string> eventCollector,
           [CosmosDB(
             databaseName: @"%CosmosDbDatabaseName%",
             containerName: @"%CosmosDbValidatorCollectionName%",
@@ -32,7 +32,7 @@ namespace Saga.Functions.Services.Participants
             var processors = ValidatorServiceCommandProcessorFactory.BuildProcessorMap(eventProducer, repository);
             var dispatcher = new CommandProcessorDispatcher(processors);
 
-            foreach (EventData eventData in eventsData)
+            foreach (var eventData in eventsData)
             {
                 try
                 {

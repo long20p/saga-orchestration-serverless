@@ -14,14 +14,14 @@ namespace Saga.Functions.Tests.Services.Participants
     {
         [Theory]
         [MemberData(nameof(TransferFunctionInputData))]
-        public async Task Transfer_processing_should_be_valid(EventData[] eventsData)
+        public async Task Transfer_processing_should_be_valid(string[] eventsData)
         {
-            var eventCollectorMock = new Mock<IAsyncCollector<EventData>>();
+            var eventCollectorMock = new Mock<IAsyncCollector<string>>();
             var stateCollectorMock = new Mock<IAsyncCollector<CheckingAccountLine>>();
             var loggerMock = new Mock<ILogger>();
 
             eventCollectorMock
-                .Setup(x => x.AddAsync(It.IsAny<EventData>(), default))
+                .Setup(x => x.AddAsync(It.IsAny<string>(), default))
                 .Returns(Task.CompletedTask);
 
             stateCollectorMock
@@ -32,7 +32,7 @@ namespace Saga.Functions.Tests.Services.Participants
                 .TransferMoney(eventsData, eventCollectorMock.Object, stateCollectorMock.Object, loggerMock.Object);
 
             eventCollectorMock
-                .Verify(x => x.AddAsync(It.IsAny<EventData>(), default), Times.AtLeastOnce());
+                .Verify(x => x.AddAsync(It.IsAny<string>(), default), Times.AtLeastOnce());
 
             stateCollectorMock
                 .Verify(x => x.AddAsync(It.IsAny<CheckingAccountLine>(), default), Times.AtLeastOnce());
@@ -40,7 +40,7 @@ namespace Saga.Functions.Tests.Services.Participants
 
         [Theory]
         [MemberData(nameof(TransferFunctionInputData))]
-        public void Transfer_processing_should_be_invalid(EventData[] eventsData)
+        public void Transfer_processing_should_be_invalid(string[] eventsData)
         {
             var stateCollectorMock = new Mock<IAsyncCollector<CheckingAccountLine>>();
             var loggerMock = new Mock<ILogger>();
