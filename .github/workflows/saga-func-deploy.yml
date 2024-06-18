@@ -6,7 +6,7 @@ on:
     branches: [ main ]
     paths: 
       - src/**
-      - .github/workflows/lp-func-long20saga4474-dev.yml
+      - .github/workflows/saga-func-deploy.yml
 env:
   AZURE_FUNCTIONAPP_NAME: lp-func-long20saga4474-dev
   AZURE_FUNCTIONAPP_PACKAGE_PATH: ./src/Saga.Functions/published
@@ -47,5 +47,5 @@ jobs:
       uses: Azure/functions-action@v1
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        publish-profile: ${{ secrets.lp_func_long20saga4474_dev_D7C6 }}
+        publish-profile: ${{ secrets.lp_func_long20saga4474_dev_B8F3 }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}

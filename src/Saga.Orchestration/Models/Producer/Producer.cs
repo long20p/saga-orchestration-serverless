@@ -17,12 +17,12 @@ namespace Saga.Orchestration.Models.Producer
         private static readonly int ExceptionsAllowed = int.Parse(Environment.GetEnvironmentVariable("EventHubsProducerExceptionsAllowedBeforeBreaking"));
         private static readonly int BreakDuration = int.Parse(Environment.GetEnvironmentVariable("EventHubsProducerBreakDuration"));
 
-        public IAsyncCollector<EventData> MessagesCollector { get; set; }
+        public IAsyncCollector<string> MessagesCollector { get; set; }
         public ILogger Logger { get; set; }
         private static AsyncCircuitBreakerPolicy circuitBreakerPolicy;
         private static AsyncRetryPolicy retryPolicy;
 
-        public Producer(IAsyncCollector<EventData> messagesCollector, ILogger logger)
+        public Producer(IAsyncCollector<string> messagesCollector, ILogger logger)
         {
             MessagesCollector = messagesCollector;
             Logger = logger;
@@ -31,6 +31,7 @@ namespace Saga.Orchestration.Models.Producer
             retryPolicy = CreateRetryPolicy();
         }
 
+        [Obsolete]
         public static EventData CreateEventData<T>(T message)
         {
             var transactionString = JsonConvert.SerializeObject(message);
@@ -39,22 +40,34 @@ namespace Saga.Orchestration.Models.Producer
             return new EventData(messageBytes);
         }
 
+        public static string CreateMessage<T>(T message)
+        {
+           return JsonConvert.SerializeObject(message);
+        }
+
         public async Task<ProducerResult> ProduceCommandWithRetryAsync<T>(T message)
         {
             try
             {
-                return await retryPolicy
-                .WrapAsync(circuitBreakerPolicy)
-                .ExecuteAsync(async () =>
-                {
-                    EventData eventData = CreateEventData(message);
-                    await MessagesCollector.AddAsync(eventData);
+                //return await retryPolicy
+                //.WrapAsync(circuitBreakerPolicy)
+                //.ExecuteAsync(async () =>
+                //{
+                //    EventData eventData = CreateEventData(message);
+                //    await MessagesCollector.AddAsync(eventData);
 
-                    return new ProducerResult
-                    {
-                        Message = eventData
-                    };
-                });
+                //    return new ProducerResult
+                //    {
+                //        Message = eventData
+                //    };
+                //});
+                var eventData = CreateMessage(message);
+                await MessagesCollector.AddAsync(eventData);
+
+                return new ProducerResult
+                {
+                    Message = eventData
+                };
             }
             catch (Exception ex)
             {

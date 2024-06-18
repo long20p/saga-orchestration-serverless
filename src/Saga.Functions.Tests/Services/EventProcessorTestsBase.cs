@@ -12,8 +12,6 @@ namespace Saga.Functions.Tests.Services
 {
     public class EventProcessorTestsBase
     {
-        public static int CountEvents;
-
         public static IEnumerable<object[]> InputData => new List<object[]>
         {
             new object[] {
@@ -21,9 +19,9 @@ namespace Saga.Functions.Tests.Services
             }
         };
 
-        private static EventData[] CreateEvents()
+        private static string[] CreateEvents()
         {
-            var eventsData = new EventData[]
+            var eventsData = new string[]
             {
                 CreateDefaultEvent(),
                 CreateInvalidAccountEvent(),
@@ -39,12 +37,10 @@ namespace Saga.Functions.Tests.Services
                 CreateTransferValidatedEvent()
             };
 
-            CountEvents = eventsData.Count();
-
             return eventsData;
         }
 
-        private static EventData CreateDefaultEvent()
+        private static string CreateDefaultEvent()
         {
             var defaultEvent = new DefaultEvent
             {
@@ -53,7 +49,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(defaultEvent);
         }
 
-        private static EventData CreateInvalidAccountEvent()
+        private static string CreateInvalidAccountEvent()
         {
             var invalidAccountEvent = new InvalidAccountEvent
             {
@@ -64,7 +60,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(invalidAccountEvent);
         }
 
-        private static EventData CreateInvalidAmountEvent()
+        private static string CreateInvalidAmountEvent()
         {
             var invalidAmountEvent = new InvalidAmountEvent
             {
@@ -75,7 +71,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(invalidAmountEvent);
         }
 
-        private static EventData CreateInvalidTransactionEvent()
+        private static string CreateInvalidTransactionEvent()
         {
             var invalidTransactionEvent = new InvalidTransactionEvent
             {
@@ -86,7 +82,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(invalidTransactionEvent);
         }
 
-        private static EventData CreateOtherReasonReceiptFailedEvent()
+        private static string CreateOtherReasonReceiptFailedEvent()
         {
             var otherReasonReceiptFailed = new OtherReasonReceiptFailedEvent
             {
@@ -97,7 +93,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(otherReasonReceiptFailed);
         }
 
-        private static EventData CreateOtherReasonTransferFailedEvent()
+        private static string CreateOtherReasonTransferFailedEvent()
         {
             var otherReasonTransferFailedEvent = new OtherReasonTransferFailedEvent
             {
@@ -108,7 +104,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(otherReasonTransferFailedEvent);
         }
 
-        private static EventData CreateOtherReasonValidationFailedEvent()
+        private static string CreateOtherReasonValidationFailedEvent()
         {
             var otherReasonValidationFailed = new OtherReasonValidationFailedEvent
             {
@@ -119,7 +115,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(otherReasonValidationFailed);
         }
 
-        private static EventData CreateReceiptIssuedEvent()
+        private static string CreateReceiptIssuedEvent()
         {
             var receiptIssuedEvent = new ReceiptIssuedEvent
             {
@@ -130,7 +126,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(receiptIssuedEvent);
         }
 
-        private static EventData CreateTransferCanceledEvent()
+        private static string CreateTransferCanceledEvent()
         {
             var transferCanceledEvent = new TransferCanceledEvent
             {
@@ -140,7 +136,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(transferCanceledEvent);
         }
 
-        private static EventData CreateTransferNotCanceledEvent()
+        private static string CreateTransferNotCanceledEvent()
         {
             var transferNotCanceledEvent = new TransferNotCanceledEvent
             {
@@ -151,7 +147,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(transferNotCanceledEvent);
         }
 
-        private static EventData CreateTransferSucceededEvent()
+        private static string CreateTransferSucceededEvent()
         {
             var transferSucceededEvent = new TransferSucceededEvent
             {
@@ -161,7 +157,7 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(transferSucceededEvent);
         }
 
-        private static EventData CreateTransferValidatedEvent()
+        private static string CreateTransferValidatedEvent()
         {
             var transferValidatedEvent = new TransferValidatedEvent
             {
@@ -171,25 +167,30 @@ namespace Saga.Functions.Tests.Services
             return CreateEventData(transferValidatedEvent);
         }
 
-        protected static EventData[] CreateInvalidEventsData()
+        protected static string[] CreateInvalidEventsData()
         {
             var defaultEvent = new DefaultEvent
             {
                 Header = null
             };
 
-            return new EventData[]
+            return new string[]
             {
                 CreateEventData(defaultEvent)
             };
         }
 
-        private static EventData CreateEventData(Event sagaEvent)
-        {
-            string serializedMsg = JsonConvert.SerializeObject(sagaEvent);
-            byte[] messageBytes = Encoding.UTF8.GetBytes(serializedMsg);
+        //private static string CreateEventData(Event sagaEvent)
+        //{
+        //    string serializedMsg = JsonConvert.SerializeObject(sagaEvent);
+        //    byte[] messageBytes = Encoding.UTF8.GetBytes(serializedMsg);
 
-            return new EventData(messageBytes);
+        //    return new EventData(messageBytes);
+        //}
+
+        private static string CreateEventData(Event sagaEvent)
+        {
+            return JsonConvert.SerializeObject(sagaEvent);
         }
 
         private static MessageHeader CreateDefaultMessageHeader(string messageType, string source)

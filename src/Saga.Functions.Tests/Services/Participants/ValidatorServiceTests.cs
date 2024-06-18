@@ -21,14 +21,14 @@ namespace Saga.Functions.Tests.Services.Participants
         [Fact]
         public async Task Validator_processing_should_be_valid()
         {
-            EventData[] eventsData = CreateValidatorEventsData();
+            var eventsData = CreateValidatorEventsData();
 
-            var eventCollectorMock = new Mock<IAsyncCollector<EventData>>();
+            var eventCollectorMock = new Mock<IAsyncCollector<string>>();
             var stateCollectorMock = new Mock<IAsyncCollector<InitialTransfer>>();
             var loggerMock = new Mock<ILogger>();
 
             eventCollectorMock
-                .Setup(x => x.AddAsync(It.IsAny<EventData>(), default))
+                .Setup(x => x.AddAsync(It.IsAny<string>(), default))
                 .Returns(Task.CompletedTask);
 
             stateCollectorMock
@@ -42,7 +42,7 @@ namespace Saga.Functions.Tests.Services.Participants
         [Fact]
         public void Validator_processing_should_be_invalid()
         {
-            EventData[] eventsData = CreateValidatorEventsData();
+            var eventsData = CreateValidatorEventsData();
 
             var stateCollectorMock = new Mock<IAsyncCollector<InitialTransfer>>();
             var loggerMock = new Mock<ILogger>();
@@ -60,7 +60,7 @@ namespace Saga.Functions.Tests.Services.Participants
             Assert.NotNull(exception);
         }
 
-        private EventData[] CreateValidatorEventsData()
+        private string[] CreateValidatorEventsData()
         {
             var command = new ValidateTransferCommand
             {
@@ -77,11 +77,15 @@ namespace Saga.Functions.Tests.Services.Participants
             };
 
             string serializedMsg = JsonConvert.SerializeObject(command);
-            byte[] messageBytes = Encoding.UTF8.GetBytes(serializedMsg);
+            //byte[] messageBytes = Encoding.UTF8.GetBytes(serializedMsg);
 
-            return new EventData[]
+            //return new EventData[]
+            //{
+            //    new EventData(messageBytes)
+            //};
+            return new string[]
             {
-                new EventData(messageBytes)
+                serializedMsg
             };
         }
     }

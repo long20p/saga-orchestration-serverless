@@ -7,6 +7,7 @@ using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Saga.Common.Repository;
 using Saga.Functions.Services.Activities;
 using Saga.Orchestration.Models;
 using Saga.Orchestration.Models.Transaction;
@@ -20,7 +21,7 @@ namespace Saga.Functions.Tests.Services.Activities
         public async Task Pending_saga_state_should_be_persisted_on_database()
         {
             var documentCollectorMock = new Mock<IAsyncCollector<TransactionItem>>();
-            var documentClientMock = new Mock<IDocumentClient>();
+            var repositoryUpdaterMock = new Mock<IRepositoryUpdater<TransactionItem>>();
 
             var item = new TransactionItem
             {
@@ -38,7 +39,7 @@ namespace Saga.Functions.Tests.Services.Activities
                 );
 
             TransactionItem resultItem = await OrchestratorActivity
-                .SagaOrchestratorActivity(item, documentCollectorMock.Object);
+                .SagaOrchestratorActivity(item, documentCollectorMock.Object, repositoryUpdaterMock.Object);
 
             Assert.Equal(item.Id, resultItem.Id);
         }
@@ -48,7 +49,10 @@ namespace Saga.Functions.Tests.Services.Activities
         public async Task Saga_states_should_be_updated_on_database(TransactionItem item, TransactionItem newItem)
         {
             var documentCollectorMock = new Mock<IAsyncCollector<TransactionItem>>();
-            var documentClientMock = new Mock<IDocumentClient>();
+            var repositoryUpdaterMock = new Mock<IRepositoryUpdater<TransactionItem>>();
+            
+            repositoryUpdaterMock.Setup(x => x.Update(It.IsAny<string>(), It.IsAny<TransactionItem>()))
+                .ReturnsAsync(newItem);
 
             var documents = new List<Document>
             {
@@ -58,19 +62,8 @@ namespace Saga.Functions.Tests.Services.Activities
                 }
             };
 
-            documentClientMock
-                .Setup(x => x.CreateDocumentAsync(It.IsAny<Uri>(),
-                        item,
-                        It.IsAny<RequestOptions>(),
-                        It.IsAny<bool>(),
-                        default));
-
-            documentClientMock
-                .Setup(x => x.CreateDocumentQuery(It.IsAny<Uri>(), It.IsAny<FeedOptions>()))
-                .Returns((IOrderedQueryable<Document>)documents.AsQueryable());
-
             TransactionItem resultItem = await OrchestratorActivity
-                .SagaOrchestratorActivity(newItem, documentCollectorMock.Object);
+                .SagaOrchestratorActivity(newItem, documentCollectorMock.Object, repositoryUpdaterMock.Object);
 
             Assert.NotNull(resultItem);
             Assert.Equal(newItem.Id, resultItem.Id);

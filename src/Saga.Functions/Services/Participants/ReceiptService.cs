@@ -18,8 +18,8 @@ namespace Saga.Functions.Services.Participants
     {
         [FunctionName(nameof(ReceiptCreator))]
         public static async Task ReceiptCreator(
-          [EventHubTrigger(@"%ReceiptEventHubName%", Connection = @"EventHubsNamespaceConnection")] EventData[] eventsData,
-          [EventHub(@"%ReplyEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<EventData> eventCollector,
+          [EventHubTrigger(@"%ReceiptEventHubName%", Connection = @"EventHubsNamespaceConnection")] string[] eventsData,
+          [EventHub(@"%ReplyEventHubName%", Connection = @"EventHubsNamespaceConnection")]IAsyncCollector<string> eventCollector,
           [CosmosDB(
             databaseName: @"%CosmosDbDatabaseName%",
             containerName: @"%CosmosDbReceiptCollectionName%",
@@ -32,7 +32,7 @@ namespace Saga.Functions.Services.Participants
             var processors = ReceiptServiceCommandProcessorFactory.BuildProcessorMap(eventProducer, repository);
             var dispatcher = new CommandProcessorDispatcher(processors);
 
-            foreach (EventData eventData in eventsData)
+            foreach (var eventData in eventsData)
             {
                 try
                 {

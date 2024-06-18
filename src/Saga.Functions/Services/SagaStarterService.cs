@@ -14,8 +14,8 @@ namespace Saga.Functions.Services
     {
         [FunctionName(nameof(SagaStarter))]
         public static async Task<IActionResult> SagaStarter(
-          [HttpTrigger(AuthorizationLevel.Function, methods: "post", Route = "saga/start")] TransactionItem item,
-          HttpRequest request,
+          TransactionItem item,
+          [HttpTrigger(AuthorizationLevel.Function, methods: "post", Route = "saga/start")] HttpRequest request,
           [DurableClient] IDurableOrchestrationClient client,
           ILogger log)
         {

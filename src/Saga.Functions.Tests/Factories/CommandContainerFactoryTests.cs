@@ -21,10 +21,10 @@ namespace Saga.Functions.Tests.Factories
             };
 
             string serializedMsg = JsonConvert.SerializeObject(command);
-            byte[] messageBytes = Encoding.UTF8.GetBytes(serializedMsg);
+            //byte[] messageBytes = Encoding.UTF8.GetBytes(serializedMsg);
 
-            var eventData = new EventData(messageBytes);
-            var commandContainer = CommandContainerFactory.BuildCommandContainer(eventData);
+            //var eventData = new EventData(messageBytes);
+            var commandContainer = CommandContainerFactory.BuildCommandContainer(serializedMsg);
             var newCommand = commandContainer.ParseCommand<DefaultCommand>();
 
             Assert.NotEqual(command.Header.MessageId, newCommand.Header.MessageId);

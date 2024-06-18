@@ -15,7 +15,7 @@ namespace Saga.Functions.Tests.Services
     {
         [Theory]
         [MemberData(nameof(InputData))]
-        public async Task Events_should_be_processed(EventData[] eventsData)
+        public async Task Events_should_be_processed(string[] eventsData)
         {
             var clientMock = new Mock<IDurableOrchestrationClient>();
             var documentCollectorMock = new Mock<IAsyncCollector<SagaItem>>();
@@ -32,8 +32,8 @@ namespace Saga.Functions.Tests.Services
             await EventProcessor
                 .SagaEventProcessor(eventsData, documentCollectorMock.Object, clientMock.Object, loggerMock.Object);
 
-            int expectedClientExecutionTimes = CountEvents;
-            int expectedCollectorExecutionTimes = CountEvents;
+            int expectedClientExecutionTimes = eventsData.Length;
+            int expectedCollectorExecutionTimes = eventsData.Length;
 
             clientMock
                 .Verify(x => x.RaiseEventAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expectedClientExecutionTimes));
@@ -54,7 +54,7 @@ namespace Saga.Functions.Tests.Services
                 Header = null
             };
 
-            EventData[] invalidEventsData = CreateInvalidEventsData();
+            var invalidEventsData = CreateInvalidEventsData();
 
             await EventProcessor
                 .SagaEventProcessor(invalidEventsData, documentCollectorMock.Object, clientMock.Object, loggerMock.Object);

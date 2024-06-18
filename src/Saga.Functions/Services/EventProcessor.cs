@@ -14,7 +14,7 @@ namespace SagaOrchestration.Services
     {
         [FunctionName(nameof(SagaEventProcessor))]
         public static async Task SagaEventProcessor(
-          [EventHubTrigger(@"%ReplyEventHubName%", Connection = @"EventHubsNamespaceConnection")] EventData[] eventsData,
+          [EventHubTrigger(@"%ReplyEventHubName%", Connection = @"EventHubsNamespaceConnection")] string[] eventsData,
           [CosmosDB(
             databaseName: @"%CosmosDbDatabaseName%",
             containerName: @"%CosmosDbSagaCollectionName%",
@@ -22,10 +22,9 @@ namespace SagaOrchestration.Services
           [DurableClient] IDurableOrchestrationClient client,
           ILogger log)
         {
-            foreach (EventData eventData in eventsData)
+            foreach (var eventData in eventsData)
             {
-                var jsonBody = Encoding.UTF8.GetString(eventData.Body.ToArray());
-                DefaultEvent @event = JsonConvert.DeserializeObject<DefaultEvent>(jsonBody);
+                DefaultEvent @event = JsonConvert.DeserializeObject<DefaultEvent>(eventData);
 
                 if (@event.Header == null)
                 {

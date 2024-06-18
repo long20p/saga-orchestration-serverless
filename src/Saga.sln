@@ -34,8 +34,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{9D74803C-388F-42EC-A97D-D682066A0189}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\iac.yml = ..\.github\workflows\iac.yml
-		..\.github\workflows\lp-func-long20saga4474-dev.yml = ..\.github\workflows\lp-func-long20saga4474-dev.yml
 		..\.github\workflows\saga-build.yml = ..\.github\workflows\saga-build.yml
+		..\.github\workflows\saga-func-deploy.yml = ..\.github\workflows\saga-func-deploy.yml
 	EndProjectSection
 EndProject
 Global

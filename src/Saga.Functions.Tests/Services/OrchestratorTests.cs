@@ -57,6 +57,7 @@ namespace Saga.Functions.Tests.Services
             Assert.NotNull(exception);
         }
 
+        [Obsolete]
         private EventData CreateEventData(Command command)
         {
             string serializedMsg = JsonConvert.SerializeObject(command);

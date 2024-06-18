@@ -37,10 +37,17 @@ namespace Saga.Orchestration.Tests
             }
         }
 
+        [Obsolete]
         protected ICommandContainer DeserializeEventData(EventData eventData)
         {
             var jsonBody = Encoding.UTF8.GetString(eventData.Body.ToArray());
             var jObject = JsonConvert.DeserializeObject<JObject>(jsonBody);
+            return new CommandContainer(jObject);
+        }
+
+        protected ICommandContainer DeserializeMessage(string message)
+        {
+            var jObject = JsonConvert.DeserializeObject<JObject>(message);
             return new CommandContainer(jObject);
         }
 

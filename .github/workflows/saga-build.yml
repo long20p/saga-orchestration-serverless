@@ -11,25 +11,30 @@ on:
     paths: 
       - src/**
 
+env:
+  CONFIGURATION: Release
+  DOTNET_VERSION: 6.0.x
+  WORKING_DIRECTORY: ./src
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: ${{ env.DOTNET_VERSION }}
         
     - name: Install dependencies
-      working-directory: ./src
+      working-directory: ${{ env.WORKING_DIRECTORY }}
       run: dotnet restore
 
     - name: Build
-      working-directory: ./src
-      run: dotnet build --configuration Release --no-restore
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
     
     - name: Test
-      working-directory: ./src
+      working-directory: ${{ env.WORKING_DIRECTORY }}
       run: dotnet test --no-restore --verbosity normal

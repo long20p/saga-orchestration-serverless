@@ -21,14 +21,14 @@ namespace Saga.Functions.Tests.Services.Participants
         [Fact]
         public async Task Receipt_processing_should_be_valid()
         {
-            EventData[] eventsData = CreateIssueReceiptEventsData();
+            string[] eventsData = CreateIssueReceiptEventsData();
 
-            var eventCollectorMock = new Mock<IAsyncCollector<EventData>>();
+            var eventCollectorMock = new Mock<IAsyncCollector<string>>();
             var stateCollectorMock = new Mock<IAsyncCollector<ExecutedTransfer>>();
             var loggerMock = new Mock<ILogger>();
 
             eventCollectorMock
-                .Setup(x => x.AddAsync(It.IsAny<EventData>(), default))
+                .Setup(x => x.AddAsync(It.IsAny<string>(), default))
                 .Returns(Task.CompletedTask);
 
             stateCollectorMock
@@ -39,7 +39,7 @@ namespace Saga.Functions.Tests.Services.Participants
                 .ReceiptCreator(eventsData, eventCollectorMock.Object, stateCollectorMock.Object, loggerMock.Object);
 
             eventCollectorMock
-                .Verify(x => x.AddAsync(It.IsAny<EventData>(), default), Times.AtLeastOnce());
+                .Verify(x => x.AddAsync(It.IsAny<string>(), default), Times.AtLeastOnce());
 
             stateCollectorMock
                 .Verify(x => x.AddAsync(It.IsAny<ExecutedTransfer>(), default), Times.AtLeastOnce());
@@ -48,7 +48,7 @@ namespace Saga.Functions.Tests.Services.Participants
         [Fact]
         public void Receipt_processing_should_be_invalid()
         {
-            EventData[] eventsData = CreateIssueReceiptEventsData();
+            var eventsData = CreateIssueReceiptEventsData();
 
             var stateCollectorMock = new Mock<IAsyncCollector<ExecutedTransfer>>();
             var loggerMock = new Mock<ILogger>();
@@ -66,7 +66,7 @@ namespace Saga.Functions.Tests.Services.Participants
             Assert.NotNull(exception);
         }
 
-        private EventData[] CreateIssueReceiptEventsData()
+        private string[] CreateIssueReceiptEventsData()
         {
             var command = new IssueReceiptCommand
             {
@@ -83,11 +83,16 @@ namespace Saga.Functions.Tests.Services.Participants
             };
 
             string serializedMsg = JsonConvert.SerializeObject(command);
-            byte[] messageBytes = Encoding.UTF8.GetBytes(serializedMsg);
+            //byte[] messageBytes = Encoding.UTF8.GetBytes(serializedMsg);
 
-            return new EventData[]
+            //return new EventData[]
+            //{
+            //    new EventData(messageBytes)
+            //};
+
+            return new string[]
             {
-                new EventData(messageBytes)
+                serializedMsg
             };
         }
     }
