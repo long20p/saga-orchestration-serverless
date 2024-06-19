@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using Saga.Common.Repository;
 using Saga.Functions.Factories;
 using Saga.Functions.Models;
 using Saga.Orchestration.Models.Transaction;
@@ -29,19 +30,10 @@ namespace Saga.Functions.Services
            [HttpTrigger(AuthorizationLevel.Function, methods: "get", Route = "saga/state/{id}")] HttpRequestMessage request,
            string id,
            [DurableClient] IDurableOrchestrationClient client,
-           [CosmosDB(
-                databaseName: @"%CosmosDbDatabaseName%",
-                containerName: @"%CosmosDbOrchestratorCollectionName%",
-                Connection = @"CosmosDbConnectionString")] IDocumentClient documentClient,
+           IRepositoryClient<TransactionItem> repositoryClient,
            ILogger log)
         {
-            Uri collectionUri = UriUtils.CreateTransactionCollectionUri();
-
-            TransactionItem item = documentClient
-              .CreateDocumentQuery<TransactionItem>(collectionUri)
-              .ToList()
-              .Where(document => document.Id == id)
-              .FirstOrDefault();
+            TransactionItem item = await repositoryClient.GetAsync(id);
 
             if (item == null)
             {

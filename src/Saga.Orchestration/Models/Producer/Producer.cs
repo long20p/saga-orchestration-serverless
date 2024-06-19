@@ -49,25 +49,18 @@ namespace Saga.Orchestration.Models.Producer
         {
             try
             {
-                //return await retryPolicy
-                //.WrapAsync(circuitBreakerPolicy)
-                //.ExecuteAsync(async () =>
-                //{
-                //    EventData eventData = CreateEventData(message);
-                //    await MessagesCollector.AddAsync(eventData);
-
-                //    return new ProducerResult
-                //    {
-                //        Message = eventData
-                //    };
-                //});
-                var eventData = CreateMessage(message);
-                await MessagesCollector.AddAsync(eventData);
-
-                return new ProducerResult
+                return await retryPolicy
+                .WrapAsync(circuitBreakerPolicy)
+                .ExecuteAsync(async () =>
                 {
-                    Message = eventData
-                };
+                    var eventData = CreateMessage(message);
+                    await MessagesCollector.AddAsync(eventData);
+
+                    return new ProducerResult
+                    {
+                        Message = eventData
+                    };
+                });
             }
             catch (Exception ex)
             {

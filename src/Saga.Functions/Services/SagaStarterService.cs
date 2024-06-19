@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -14,11 +15,12 @@ namespace Saga.Functions.Services
     {
         [FunctionName(nameof(SagaStarter))]
         public static async Task<IActionResult> SagaStarter(
-          TransactionItem item,
-          [HttpTrigger(AuthorizationLevel.Function, methods: "post", Route = "saga/start")] HttpRequest request,
+          [HttpTrigger(AuthorizationLevel.Function, methods: "post", Route = "saga/start")] HttpRequestMessage request,
           [DurableClient] IDurableOrchestrationClient client,
           ILogger log)
         {
+            var body = await request.Content.ReadAsStringAsync();
+            var item = JsonSerializer.Deserialize<TransactionItem>(body);
             RequestInputResult result = ValidateInput(item);
 
             if (!result.Valid)

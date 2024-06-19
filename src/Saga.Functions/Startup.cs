@@ -16,7 +16,7 @@ namespace Saga.Functions
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddHttpClient();
-            builder.Services.AddSingleton<IRepositoryUpdater<TransactionItem>, CosmosDbUpdater>();
+            builder.Services.AddSingleton<IRepositoryClient<TransactionItem>, CosmosDbClient>();
         }
     }
 }

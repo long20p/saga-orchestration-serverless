@@ -22,11 +22,7 @@ namespace Saga.Functions.Services.Activities
             containerName: @"%CosmosDbOrchestratorCollectionName%",
             Connection = @"CosmosDbConnectionString")]
             IAsyncCollector<TransactionItem> documentCollector,
-          //[CosmosDB(
-          //  databaseName: @"%CosmosDbDatabaseName%",
-          //  containerName: @"%CosmosDbOrchestratorCollectionName%",
-          //  Connection = @"CosmosDbConnectionString")] IDocumentClient client
-            IRepositoryUpdater<TransactionItem> repositoryUpdater
+            IRepositoryClient<TransactionItem> repositoryClient
             )
         {
             if (item.State == SagaState.Pending.ToString())
@@ -35,7 +31,7 @@ namespace Saga.Functions.Services.Activities
                 return item;
             }
 
-            return await repositoryUpdater.Update(item.Id, item);
+            return await repositoryClient.UpdateAsync(item.Id, item);
         }
     }
 }

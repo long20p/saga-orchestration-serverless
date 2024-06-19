@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Saga.Common.Repository
 {
-    public interface IRepositoryUpdater<T>
+    public interface IRepositoryClient<T>
     {
-        Task<T> Update(string id, T latest);
+        Task<T> GetAsync(string id);
+
+        Task<T> UpdateAsync(string id, T latest);
     }
 }

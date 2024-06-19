@@ -21,7 +21,7 @@ namespace Saga.Functions.Tests.Services.Activities
         public async Task Pending_saga_state_should_be_persisted_on_database()
         {
             var documentCollectorMock = new Mock<IAsyncCollector<TransactionItem>>();
-            var repositoryUpdaterMock = new Mock<IRepositoryUpdater<TransactionItem>>();
+            var repositoryClientMock = new Mock<IRepositoryClient<TransactionItem>>();
 
             var item = new TransactionItem
             {
@@ -39,7 +39,7 @@ namespace Saga.Functions.Tests.Services.Activities
                 );
 
             TransactionItem resultItem = await OrchestratorActivity
-                .SagaOrchestratorActivity(item, documentCollectorMock.Object, repositoryUpdaterMock.Object);
+                .SagaOrchestratorActivity(item, documentCollectorMock.Object, repositoryClientMock.Object);
 
             Assert.Equal(item.Id, resultItem.Id);
         }
@@ -49,9 +49,9 @@ namespace Saga.Functions.Tests.Services.Activities
         public async Task Saga_states_should_be_updated_on_database(TransactionItem item, TransactionItem newItem)
         {
             var documentCollectorMock = new Mock<IAsyncCollector<TransactionItem>>();
-            var repositoryUpdaterMock = new Mock<IRepositoryUpdater<TransactionItem>>();
+            var repositoryUpdaterMock = new Mock<IRepositoryClient<TransactionItem>>();
             
-            repositoryUpdaterMock.Setup(x => x.Update(It.IsAny<string>(), It.IsAny<TransactionItem>()))
+            repositoryUpdaterMock.Setup(x => x.UpdateAsync(It.IsAny<string>(), It.IsAny<TransactionItem>()))
                 .ReturnsAsync(newItem);
 
             var documents = new List<Document>
