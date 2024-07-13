@@ -12,26 +12,34 @@ using Saga.Orchestration.Utils;
 
 namespace Saga.Functions.Services.Activities
 {
-    public static class OrchestratorActivity
+    public class OrchestratorActivity
     {
+        private readonly IRepositoryClient<TransactionItem> repositoryClient;
+
+        public OrchestratorActivity(IRepositoryClient<TransactionItem> repositoryClient)
+        {
+            this.repositoryClient = repositoryClient;
+        }
+
         [FunctionName(nameof(SagaOrchestratorActivity))]
-        public static async Task<TransactionItem> SagaOrchestratorActivity(
+        public async Task<TransactionItem> SagaOrchestratorActivity(
           [ActivityTrigger] TransactionItem item,
           [CosmosDB(
             databaseName: @"%CosmosDbDatabaseName%",
             containerName: @"%CosmosDbOrchestratorCollectionName%",
             Connection = @"CosmosDbConnectionString")]
-            IAsyncCollector<TransactionItem> documentCollector,
-            IRepositoryClient<TransactionItem> repositoryClient
-            )
+            IAsyncCollector<TransactionItem> documentCollector)
         {
-            if (item.State == SagaState.Pending.ToString())
-            {
-                await documentCollector.AddAsync(item);
-                return item;
-            }
+            //if (item.State == SagaState.Pending.ToString())
+            //{
+            //    await documentCollector.AddAsync(item);
+            //    return item;
+            //}
 
-            return await repositoryClient.UpdateAsync(item.Id, item);
+            //return await repositoryClient.UpdateAsync(item.Id, item);
+
+            await documentCollector.AddAsync(item); // add or update if item already exists
+            return item;
         }
     }
 }

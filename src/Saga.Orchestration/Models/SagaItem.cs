@@ -5,6 +5,9 @@ namespace Saga.Orchestration.Models
 {
     public class SagaItem
     {
+        [JsonProperty("id")]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+
         [JsonProperty("transactionId")]
         public string TransactionId { get; set; }
 

@@ -11,6 +11,9 @@ namespace Saga.Participants.Receipt.Models
     public class ExecutedTransfer
     {
         [JsonProperty("id")]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+
+        [JsonProperty("transactionId")]
         public string TransactionId { get; }
 
         [JsonProperty("transferDate")]

@@ -21,12 +21,12 @@ namespace Saga.Participants.Validator.Models
         [JsonProperty("state")]
         public InitialTransferState State { get; private set; }
 
-        public InitialTransfer(string id, string fromId, string toId, decimal amount)
+        public InitialTransfer(string id, string fromId, string toId, decimal money)
         {
             TransactionId = id;
             From = new Account(fromId);
             To = new Account(toId);
-            Amount = new Amount(amount);
+            Amount = new Amount(money);
             State = InitialTransferState.NONE;
         }
 

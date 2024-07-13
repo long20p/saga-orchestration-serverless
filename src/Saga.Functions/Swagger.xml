@@ -4,14 +4,14 @@
         <name>Client</name>
     </assembly>
     <members>
-        <member name="M:SagaFunctions.Services.SagaStarterService.SagaStarter(Microsoft.AspNetCore.Http.HttpRequest)">
+        <member name="M:SagaFunctions.Services.SagaStarterService.SagaStarter(System.Net.Http.HttpRequestMessage)">
             <summary>
             Start saga
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>        
-          <member name="M:SagaFunctions.Services.SagaStatusCheckerService.StatusChecker(Microsoft.AspNetCore.Http.HttpRequest)">
+          <member name="M:SagaFunctions.Services.SagaStatusCheckerService.StatusChecker(System.Net.Http.HttpRequestMessage)">
             <summary>
             Status checker
             </summary>

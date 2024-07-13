@@ -1,11 +1,11 @@
 ﻿using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Saga.Functions.Models;
 using Saga.Orchestration.Models.Transaction;
 
@@ -20,7 +20,7 @@ namespace Saga.Functions.Services
           ILogger log)
         {
             var body = await request.Content.ReadAsStringAsync();
-            var item = JsonSerializer.Deserialize<TransactionItem>(body);
+            var item = JsonConvert.DeserializeObject<TransactionItem>(body);
             RequestInputResult result = ValidateInput(item);
 
             if (!result.Valid)

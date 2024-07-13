@@ -19,10 +19,12 @@ namespace Saga.Functions.Services
     public class SagaStatusCheckerService
     {
         private readonly HttpClient httpClient;
+        private readonly IRepositoryClient<TransactionItem> repositoryClient;
 
-        public SagaStatusCheckerService(HttpClient httpClient)
+        public SagaStatusCheckerService(HttpClient httpClient, IRepositoryClient<TransactionItem> repositoryClient)
         {
             this.httpClient = httpClient;
+            this.repositoryClient = repositoryClient;
         }
 
         [FunctionName(nameof(SagaStatusChecker))]
@@ -30,7 +32,6 @@ namespace Saga.Functions.Services
            [HttpTrigger(AuthorizationLevel.Function, methods: "get", Route = "saga/state/{id}")] HttpRequestMessage request,
            string id,
            [DurableClient] IDurableOrchestrationClient client,
-           IRepositoryClient<TransactionItem> repositoryClient,
            ILogger log)
         {
             TransactionItem item = await repositoryClient.GetAsync(id);

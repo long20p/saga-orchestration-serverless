@@ -7,10 +7,6 @@
   },
   "logging": {
     "fileLoggingMode": "debugOnly",
-    "logLevel": {
-      "Function.MyFunction": "Information",
-      "default": "None"
-    },
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
@@ -24,7 +20,8 @@
         "movingAverageRatio": 1.0,
         "excludedTypes": "Dependency;Event",
         "includedTypes": "PageView;Trace"
-      }
+      },
+      "enableLiveMetricsFilters": true
     }
   }
 }

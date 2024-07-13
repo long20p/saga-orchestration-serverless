@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Saga.Functions.Repository
 {
-    public class CosmosDbClient : IRepositoryClient<TransactionItem>
+    public class OrchestratorRepositoryClient : IRepositoryClient<TransactionItem>
     {
         private static CosmosClient cosmosClient = new CosmosClient(Environment.GetEnvironmentVariable("CosmosDbConnectionString"));
 
