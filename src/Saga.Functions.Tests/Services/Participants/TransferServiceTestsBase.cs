@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Azure.Messaging.EventHubs;
 using Newtonsoft.Json;
 using Saga.Common.Commands;
 using Saga.Common.Enums;

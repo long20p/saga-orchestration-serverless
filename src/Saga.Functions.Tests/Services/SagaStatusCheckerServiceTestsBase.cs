@@ -1,13 +1,13 @@
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
+using Moq;
+using Moq.Protected;
+using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using Moq;
-using Moq.Protected;
-using Newtonsoft.Json;
 
 namespace Saga.Functions.Tests.Services
 {

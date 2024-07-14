@@ -1,6 +1,3 @@
-using System;
-using System.Text;
-using System.Threading.Tasks;
 using Azure.Messaging.EventHubs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
@@ -11,6 +8,9 @@ using Saga.Common.Messaging;
 using Saga.Functions.Services;
 using Saga.Functions.Tests.Utils;
 using Saga.Orchestration.Models.Transaction;
+using System;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Saga.Functions.Tests.Services
