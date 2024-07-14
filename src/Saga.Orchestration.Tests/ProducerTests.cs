@@ -1,15 +1,14 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Saga.Common.Messaging;
 using Saga.Common.Commands;
 using Saga.Common.Enums;
+using Saga.Common.Messaging;
 using Saga.Common.Processors;
-using Xunit;
 using Saga.Orchestration.Models.Producer;
-using Azure.Messaging.EventHubs;
+using System;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Saga.Orchestration.Tests
 {
