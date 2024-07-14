@@ -20,14 +20,6 @@ namespace Saga.Functions.Tests.Services.Activities
                     AccountFromId = accountFromId,
                     AccountToId = accountToId,
                     Amount = 100.00M,
-                    State = nameof(SagaState.Pending)
-                },
-                new TransactionItem
-                {
-                    Id = transactionId,
-                    AccountFromId = accountFromId,
-                    AccountToId = accountToId,
-                    Amount = 100.00M,
                     State = nameof(SagaState.Success)
                 }
             },
@@ -38,26 +30,10 @@ namespace Saga.Functions.Tests.Services.Activities
                     AccountFromId = accountFromId,
                     AccountToId = accountToId,
                     Amount = 100.00M,
-                    State = nameof(SagaState.Pending)
-                },
-                new TransactionItem
-                {
-                    Id = transactionId,
-                    AccountFromId = accountFromId,
-                    AccountToId = accountToId,
-                    Amount = 100.00M,
                     State = nameof(SagaState.Cancelled)
                 }
             },
             new object[] {
-                new TransactionItem
-                {
-                    Id = transactionId,
-                    AccountFromId = accountFromId,
-                    AccountToId = accountToId,
-                    Amount = 100.00M,
-                    State = nameof(SagaState.Pending)
-                },
                 new TransactionItem
                 {
                     Id = transactionId,

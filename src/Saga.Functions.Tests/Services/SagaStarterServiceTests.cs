@@ -1,10 +1,12 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Newtonsoft.Json;
 using Saga.Functions.Models;
 using Saga.Functions.Services;
 using Saga.Orchestration.Models.Transaction;
@@ -19,7 +21,6 @@ namespace Saga.Functions.Tests.Services
         {
             var loggerMock = new Mock<ILogger>();
             var clientMock = new Mock<IDurableOrchestrationClient>();
-            var httpRequestMock = new Mock<HttpRequest>();
 
             var item = new TransactionItem
             {
@@ -28,12 +29,17 @@ namespace Saga.Functions.Tests.Services
                 Amount = 100.00M
             };
 
+            var httpRequest = new HttpRequestMessage
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(item))
+            };
+
             clientMock.
               Setup(x => x.StartNewAsync(nameof(Orchestrator.SagaOrchestrator), It.IsAny<string>(), It.IsAny<TransactionItem>())).
               ReturnsAsync(item.Id);
 
             IActionResult result = await SagaStarterService
-                .SagaStarter(item, httpRequestMock.Object, clientMock.Object, loggerMock.Object);
+                .SagaStarter(httpRequest, clientMock.Object, loggerMock.Object);
 
             var okObjectResult = result as OkObjectResult;
             Assert.NotNull(okObjectResult);
@@ -49,10 +55,13 @@ namespace Saga.Functions.Tests.Services
         {
             var loggerMock = new Mock<ILogger>();
             var clientMock = new Mock<IDurableOrchestrationClient>();
-            var httpRequestMock = new Mock<HttpRequest>();
+            var httpRequest = new HttpRequestMessage
+            {
+                Content = new StringContent(string.Empty)
+            };
 
             IActionResult result = await SagaStarterService
-                .SagaStarter(null, httpRequestMock.Object, clientMock.Object, loggerMock.Object);
+                .SagaStarter(httpRequest, clientMock.Object, loggerMock.Object);
 
             var badRequestResult = result as BadRequestObjectResult;
             Assert.NotNull(badRequestResult);
@@ -74,7 +83,6 @@ namespace Saga.Functions.Tests.Services
         {
             var loggerMock = new Mock<ILogger>();
             var clientMock = new Mock<IDurableOrchestrationClient>();
-            var httpRequestMock = new Mock<HttpRequest>();
 
             var item = new TransactionItem
             {
@@ -83,12 +91,17 @@ namespace Saga.Functions.Tests.Services
                 Amount = amount
             };
 
+            var httpRequest = new HttpRequestMessage
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(item))
+            };
+
             clientMock.
               Setup(x => x.StartNewAsync(nameof(Orchestrator.SagaOrchestrator), It.IsAny<string>(), It.IsAny<TransactionItem>())).
               ReturnsAsync(item.Id);
 
             IActionResult result = await SagaStarterService
-                .SagaStarter(item, httpRequestMock.Object, clientMock.Object, loggerMock.Object);
+                .SagaStarter(httpRequest, clientMock.Object, loggerMock.Object);
 
             var badRequestResult = result as BadRequestObjectResult;
             Assert.NotNull(badRequestResult);

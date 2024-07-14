@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -12,7 +11,6 @@ using Saga.Common.Repository;
 using Saga.Functions.Factories;
 using Saga.Functions.Models;
 using Saga.Orchestration.Models.Transaction;
-using Saga.Orchestration.Utils;
 
 namespace Saga.Functions.Services
 {

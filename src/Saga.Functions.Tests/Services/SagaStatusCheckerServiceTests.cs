@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
+using Saga.Common.Repository;
 using Saga.Functions.Models;
 using Saga.Functions.Services;
 using Saga.Orchestration.Models;
@@ -29,27 +30,20 @@ namespace Saga.Functions.Tests.Services
         {
             var transactionId = Guid.NewGuid().ToString();
             Mock<IDurableOrchestrationClient> clientMock = CreateDurableOrchestrationMock();
+            var repositoryClientMock = new Mock<IRepositoryClient<TransactionItem>>();
             HttpClient httpClient = CreateValidHttpClient();
             var loggerMock = new Mock<ILogger>();
 
-            var documentClientMock = new Mock<IDocumentClient>();
-
-            var documents = new List<TransactionItem>
+            var item = new TransactionItem
             {
-                new TransactionItem
-                {
-                    Id = transactionId,
-                    AccountFromId = Guid.NewGuid().ToString(),
-                    AccountToId = Guid.NewGuid().ToString(),
-                    Amount = 100.00M,
-                    State = nameof(SagaState.Pending)
-                }
-            }
-            .AsQueryable() as IOrderedQueryable<TransactionItem>;
+                Id = transactionId,
+                AccountFromId = Guid.NewGuid().ToString(),
+                AccountToId = Guid.NewGuid().ToString(),
+                Amount = 100.00M,
+                State = nameof(SagaState.Pending)
+            };
 
-            documentClientMock
-                .Setup(x => x.CreateDocumentQuery<TransactionItem>(It.IsAny<Uri>(), It.IsAny<FeedOptions>()))
-                .Returns(documents);
+            repositoryClientMock.Setup(x => x.GetAsync(transactionId)).ReturnsAsync(item);
 
             var request = new HttpRequestMessage
             {
@@ -57,9 +51,9 @@ namespace Saga.Functions.Tests.Services
                 RequestUri = new Uri($@"http://localhost:7071/api/saga/state/{transactionId}"),
             };
 
-            var sagaStatusService = new SagaStatusCheckerService(httpClient);
+            var sagaStatusService = new SagaStatusCheckerService(httpClient, repositoryClientMock.Object);
             var result = await sagaStatusService
-                .SagaStatusChecker(request, transactionId, clientMock.Object, documentClientMock.Object, loggerMock.Object);
+                .SagaStatusChecker(request, transactionId, clientMock.Object, loggerMock.Object);
 
             var okObjectResult = result as OkObjectResult;
             Assert.NotNull(okObjectResult);
@@ -79,15 +73,11 @@ namespace Saga.Functions.Tests.Services
         {
             Mock<IDurableOrchestrationClient> clientMock = CreateDurableOrchestrationMock();
             HttpClient httpClient = CreateValidHttpClient();
-            var documentClientMock = new Mock<IDocumentClient>();
+            var repositoryClientMock = new Mock<IRepositoryClient<TransactionItem>>();
             var loggerMock = new Mock<ILogger>();
 
             var transactionId = Guid.NewGuid().ToString();
             var documents = new List<TransactionItem>();
-
-            documentClientMock
-                .Setup(x => x.CreateDocumentQuery<TransactionItem>(It.IsAny<Uri>(), It.IsAny<FeedOptions>()))
-                .Returns(documents.AsQueryable() as IOrderedQueryable<TransactionItem>);
 
             var request = new HttpRequestMessage
             {
@@ -95,9 +85,9 @@ namespace Saga.Functions.Tests.Services
                 RequestUri = new Uri($@"http://localhost:7071/api/saga/state/{transactionId}"),
             };
 
-            var sagaStatusService = new SagaStatusCheckerService(httpClient);
+            var sagaStatusService = new SagaStatusCheckerService(httpClient, repositoryClientMock.Object);
             var result = await sagaStatusService
-                .SagaStatusChecker(request, transactionId, clientMock.Object, documentClientMock.Object, loggerMock.Object);
+                .SagaStatusChecker(request, transactionId, clientMock.Object, loggerMock.Object);
 
             Assert.NotNull(result as NotFoundObjectResult);
         }

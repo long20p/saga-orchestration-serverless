@@ -38,32 +38,32 @@ namespace Saga.Functions.Tests.Services.Activities
                     Task.CompletedTask
                 );
 
-            TransactionItem resultItem = await OrchestratorActivity
-                .SagaOrchestratorActivity(item, documentCollectorMock.Object, repositoryClientMock.Object);
+            var activity = new OrchestratorActivity(repositoryClientMock.Object);
+
+            TransactionItem resultItem = await activity.SagaOrchestratorActivity(item, documentCollectorMock.Object);
 
             Assert.Equal(item.Id, resultItem.Id);
         }
 
         [Theory]
         [MemberData(nameof(OrchestratorActivityInputData))]
-        public async Task Saga_states_should_be_updated_on_database(TransactionItem item, TransactionItem newItem)
+        public async Task Saga_states_should_be_updated_on_database(TransactionItem newItem)
         {
             var documentCollectorMock = new Mock<IAsyncCollector<TransactionItem>>();
-            var repositoryUpdaterMock = new Mock<IRepositoryClient<TransactionItem>>();
-            
-            repositoryUpdaterMock.Setup(x => x.UpdateAsync(It.IsAny<string>(), It.IsAny<TransactionItem>()))
-                .ReturnsAsync(newItem);
+            var repositoryClientMock = new Mock<IRepositoryClient<TransactionItem>>();
 
-            var documents = new List<Document>
-            {
-                new Document
-                {
-                    Id = item.Id
-                }
-            };
+            //repositoryClientMock.Setup(x => x.UpdateAsync(It.IsAny<string>(), It.IsAny<TransactionItem>()))
+            //    .ReturnsAsync(newItem);
 
-            TransactionItem resultItem = await OrchestratorActivity
-                .SagaOrchestratorActivity(newItem, documentCollectorMock.Object, repositoryUpdaterMock.Object);
+            documentCollectorMock
+                .Setup(x => x.AddAsync(It.IsAny<TransactionItem>(), default))
+                .Returns(
+                    Task.CompletedTask
+                );
+
+            var activity = new OrchestratorActivity(repositoryClientMock.Object);
+
+            TransactionItem resultItem = await activity.SagaOrchestratorActivity(newItem, documentCollectorMock.Object);
 
             Assert.NotNull(resultItem);
             Assert.Equal(newItem.Id, resultItem.Id);
